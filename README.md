@@ -13,11 +13,17 @@ FOR LINUX
 MAQSS_GCS uses the xbeeplus library at: https://github.com/NGCP/xbeeplus
 
 To configure this project to use xbeeplus:
+
 1. Download (clone, fork) xbeeplus repo locally
+
 2. Download MAQSS_GCS repo locally
+
 3. Navigate to MAQSS_GCS repo
+
 4. Modify MAQSS_GCS.pro file to specify xbeeplus library path
-  A. Modify 
+
+  A. Modify SOURCES
+  
             SOURCES += main.cpp\
               ./relative/path/to/xbeeplus/lib/ReceivePacket.cpp \
               ./relative/path/to/xbeeplus/lib/ReceivePacket.cpp \
@@ -26,17 +32,21 @@ To configure this project to use xbeeplus:
               ./relative/path/to/xbeeplus/lib/Utility.cpp \
       
     For example, if xbeeplus is two levels above the MAQSS_GCS directory and inside NGCP,
+            
             SOURCES += main.cpp \
               ../../NGCP/xbeeplus/lib/ReceivePacket.cpp \
               ../../NGCP/xbeeplus/lib/SerialXbee.cpp \
               ../../NGCP/xbeeplus/lib/TransmitRequest.cpp \
               ../../NGCP/xbeeplus/lib/Utility.cpp \
       
-  B. Modify LIBS += \
+  B. Modify LIBS
+  
+            LIBS += \
               -lboost_system\
               -lboost_thread\
   
-  C. Modify 
+  C. Modify HEADERS
+  
             HEADERS += \
               ./relative/path/to/xbeeplus/include/Frame.hpp \
               ./relative/path/to/xbeeplus/include/ReceivePacket.hpp \
