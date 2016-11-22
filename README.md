@@ -17,7 +17,8 @@ To configure this project to use xbeeplus:
 2. Download MAQSS_GCS repo locally
 3. Navigate to MAQSS_GCS repo
 4. Modify MAQSS_GCS.pro file to specify xbeeplus library path
-  A. Modify SOURCES += main.cpp\
+  A. Modify 
+            SOURCES += main.cpp\
               ./relative/path/to/xbeeplus/lib/ReceivePacket.cpp \
               ./relative/path/to/xbeeplus/lib/ReceivePacket.cpp \
               ./relative/path/to/xbeeplus/lib/SerialXbee.cpp \
@@ -35,7 +36,8 @@ To configure this project to use xbeeplus:
               -lboost_system\
               -lboost_thread\
   
-  C. Modify HEADERS += \
+  C. Modify 
+            HEADERS += \
               ./relative/path/to/xbeeplus/include/Frame.hpp \
               ./relative/path/to/xbeeplus/include/ReceivePacket.hpp \
               ./relative/path/to/xbeeplus/include/SerialXbee.hpp \
