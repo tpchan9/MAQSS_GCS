@@ -25,5 +25,4 @@ MapQuickItem {
 
     anchorPoint.x: image.width/2
     anchorPoint.y: image.height/2
-//    coordinate: displayCoord
 }

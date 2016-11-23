@@ -2,8 +2,8 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import XbeeInterface 1.0
-import "Transforms.js" as Transforms
-import "Coordinates.js" as Coordinates
+import "js_resources/Transforms.js" as Transforms
+import "js_resources/Coordinates.js" as Coordinates
 
 Rectangle {
     id: controlPanelBox

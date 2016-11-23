@@ -3,8 +3,8 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import QtPositioning 5.3
 import QtLocation 5.4
-import "Coordinates.js" as Coordinates
-import "GPS.js" as GPS
+import "js_resources/Coordinates.js" as Coordinates
+import "js_resources/GPS.js" as GPS
 
 Rectangle {
     id: mapContainer
@@ -13,6 +13,7 @@ Rectangle {
     property int mapHeight
     property var searchChunkContainer: []
     property var quadcopterIcons: []
+    property var targetIcons: []
     property real startLat: 35.308806
     property real startLon: -120.668194
 
@@ -126,7 +127,8 @@ Rectangle {
         var i1,j1
         var component
         var iconComponent
-        var tmpCoord
+        var tmp_coord
+        var target_icon_component;
 
         // Update main search Area
         mapPolygon.path = []
@@ -178,19 +180,27 @@ Rectangle {
         for (i1 = 0; i1 < quadcopters.length; i1++ ) {
 //            tt = GPS.midPoint(searchChunkCoords[0][0],searchChunkCoords[0][2])
 //            console.log(searchAreaCoords)
-//            tmpCoord = QtPositioning.coordinate(tt[0],tt[1],tt[2])
+//            tmp_coord = QtPositioning.coordinate(tt[0],tt[1],tt[2])
             vehicleCoords[i1] = [quadcopters[i1].coordLLA[0], quadcopters[i1].coordLLA[1], quadcopters[i1].coordLLA[2]]
 
             // render the quadcopter icon at the starting coord
-            tmpCoord = QtPositioning.coordinate(quadcopters[i1].coordLLA[0], quadcopters[i1].coordLLA[1])
+            tmp_coord = QtPositioning.coordinate(quadcopters[i1].coordLLA[0], quadcopters[i1].coordLLA[1])
 
             // if icon doesnt exist, create
             if (quadcopterIcons.length <= i1) {
                 quadcopterIcons[i1] = iconComponent.createObject(map)
             }
-            quadcopterIcons[i1].coordinate = tmpCoord
+            quadcopterIcons[i1].coordinate = tmp_coord
             quadcopterIcons[i1].iconColor = quadcopterIcons[i1].availableColors[quadcopters[i1].idNumber]
             map.addMapItem(quadcopterIcons[i1])
+        }
+
+        // Create target icons
+        for (i1 = 0; i1 < targets.length; i1++) {
+            tmp_coord = QtPositioning.coordinate(targets[i1].coordLLA[0], targets[i1].coordLLA[1], targets[i1].coordLLA[2]);
+
+            targets[i1].coordinate = tmp_coord;
+            map.addMapItem(targets[i1]);
         }
     }
 }

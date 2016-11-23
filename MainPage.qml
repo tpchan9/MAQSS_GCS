@@ -2,7 +2,8 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import XbeeInterface 1.0
-import "Utils.js" as Utils
+import "js_resources/Utils.js" as Utils
+import "js_resources/Messaging.js" as Messaging
 
 /* Main Page Object
   A single MainPage object is created in the ApplicationWindow
@@ -40,6 +41,7 @@ Item {
     property var vehicleCoords: [] // array which stores the locations of each active vehicle
 
     property var quadcopters: [] // array which stores Quadcopter.qml components
+    property var targets: [] // array which stores TargetIcon.qml components
 
     signal startSignal(var object) // signal to indicate the start button has been toggled
 
@@ -151,20 +153,14 @@ Item {
         var component
         var tmp = new Array // arrays can have different data types
         var i1;
+        var msg_container;
+        var done_flag = false
+        var nextNdx = quadcopters.length;
 
         // split the msg for parsing
-        // TODO: Move this into a function
-        msg = msg.split(",")
-        var quadID = parseInt(msg[0][1])
-        var quadLoc = (msg[1].substr(1)).split(" ")
+        msg_container = Messaging.handleGenericMsg(msg);
 
-        quadLoc = Utils.strToFloat(quadLoc)
-        var quadStatus = msg[2]
-        quadStatus = quadStatus.substr(1)
-        var quadRole = msg[3][1]
-        var nextNdx = quadcopters.length;
-        var doneFlag = false
-
+        if (msg_container.msgType !== "INVALID") {
         // wait for Quadcopter.qml component to be created
         component = Qt.createComponent("Quadcopter.qml")
         console.log(component.errorString())
@@ -173,36 +169,53 @@ Item {
 
         // check if quadID already exists
         for (i1 = 0; i1 < quadcopters.length; i1++) {
-            if (quadcopters[i1].idNumber === quadID) {
-                quadcopters[i1].coordLLA = quadLoc
-                quadcopters[i1].status = quadStatus
-                quadcopters[i1].role = parseInt(quadRole)
-                doneFlag = true // set flag to indicate frame has been processed
+            if (quadcopters[i1].idNumber === msg_container.vehicleID) {
+                quadcopters[i1].coordLLA = msg_container.vehicleLocation
+                quadcopters[i1].status = msg_container.vehicleStatus
+                quadcopters[i1].role = msg_container.vehicleRole
+                done_flag = true // set flag to indicate frame has been processed
             }
         }
 
         // else, create a new Quadcopter object
-        if (!doneFlag && component.status === Component.Ready) {
-            quadcopters[nextNdx] = component.createObject(mapContainer, {"idNumber": quadID, "coordLLA": quadLoc})
+        if (!done_flag && component.status === Component.Ready) {
+            quadcopters[nextNdx] = component.createObject(mapContainer, {"idNumber": msg_container.vehicleID, "coordLLA": msg_container.vehicleLocation})
 
             // warn object creation error
-            if (quadcopters[nextNdx] === null) {
-                console.log("Error Creating Quadcopter Object")
-            }
-            //                quadcopters[nextNdx].coordLLA = quadLoc
-            quadcopters[nextNdx].status = quadStatus
-            quadcopters[nextNdx].role = parseInt(quadRole)
+            if (quadcopters[nextNdx] === null) console.log("Error Creating Quadcopter Object")
+
+            // update quadcopter
+            quadcopters[nextNdx].status = msg_container.vehicleStatus
+            quadcopters[nextNdx].role = msg_container.vehicleRole
             currentMsg = "Vehicle: " + quadcopters[nextNdx].name + " connected with status: " + quadcopters[nextNdx].status
             messageBox.write(currentMsg)
 
-            console.log(quadRole, !quadRole, quadRole === 0, !quadcopters[nextNdx].role)
+            // increment counter for number of Quick Search/Detailed Search Vehicles
             if (!quadcopters[nextNdx].role) nQuickSearch++ // increment
             else nDetailedSearch++
+        }
+
+        // handle a target location msg
+        if (msg_container.msgType === "TGT" ) {
+            var target_component;
+            var next_target_ndx = targets.length;
+            target_component = Qt.createComponent("TargetIcon.qml")
+            console.log(target_component.errorString())
+            while (target_component.status !== Component.Ready) {
+            }
+            targets[next_target_ndx] = target_component.createObject(mapContainer, {"coordLLA": msg_container.targetLocation});
+
+            // warn object creation error
+            if (targets[next_target_ndx] === null) console.log("Error Creating TargetIcon Object")
+            currentMsg = "Target Found at: " + targets[next_target_ndx].coordLLA;
+            messageBox.write(currentMsg);
+            console.log(currentMsg);
         }
 
         // send vehicleStatusBox an updateStatus signal
         vehicleStatusBox.updateStatus(true)
         mapContainer.update()
+        }
     }
 }
 
