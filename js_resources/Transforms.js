@@ -189,7 +189,6 @@ function xRotatedLLAtoLLA(rotatedCoordLLA, R) {
 
         tmp[i1] = new Array
         for (j1 = 0; j1 < 5; j1++) {
-
             tmp[i1][j1] = new Array
             // boxCoords in rotated ECEF
             tmp[i1][j1] = xLLAtoECEF(rotatedCoordLLA[i1][j1])
@@ -199,12 +198,7 @@ function xRotatedLLAtoLLA(rotatedCoordLLA, R) {
 
             // boxCoords in normal LLA (return)
             tmp[i1][j1] = xECEFtoLLA(tmp[i1][j1])
-
         }
     }
     return tmp
-
 }
-
-
-
