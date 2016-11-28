@@ -153,7 +153,7 @@ function writeMsnString(searchChunks, vehicleCoords, choices, cornerChoices, fie
         // Generate message string following format in heading "NEWMSG,MSN,Q1,P35.123456 120.123456 0.0000,H1.23456,F139.7,D100.4567"
         msnString[i1] = "NEWMSG" + ",MSN"
                 + ",Q" + mainPage.quadcopters[choices[i1]].idNumber
-                + ",P" + String(startLocs[i1][0]) + " " + String(startLocs[i1][1]) + " " + String(startLocs[i1][2])
+                + ",P" + String(startLocs[i1][0]) + ":" + String(startLocs[i1][1]) + ":" + String(startLocs[i1][2])
                 + ",H" + String(headings[i1])
                 + ",F" + String(fieldHeading)
                 + ",D" + String(distance);

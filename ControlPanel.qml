@@ -110,7 +110,7 @@ Rectangle {
 
                     // each element of the quadcopters array is a Quadcopter.qml object
                     // TODO: Remove double write once xbeeplus library is fixed (read works 100%)
-                    XbeeInterface.writeMsg("NEWMSG,START,Q" + quadcopters[ndx].idNumber);
+//                    XbeeInterface.writeMsg("NEWMSG,START,Q" + quadcopters[ndx].idNumber);
                     XbeeInterface.writeMsg("NEWMSG,START,Q" + quadcopters[ndx].idNumber);
                 }
             }
@@ -121,7 +121,7 @@ Rectangle {
                 currentMsg = "Halting Mission"
                 messageBox.write(currentMsg)
                 for (ndx = 0; ndx < quadcopters.length; ndx++) {
-                    XbeeInterface.writeMsg("NEWMSG,STOP,Q" + quadcopters[ndx].idNumber);
+//                    XbeeInterface.writeMsg("NEWMSG,STOP,Q" + quadcopters[ndx].idNumber);
                     XbeeInterface.writeMsg("NEWMSG,STOP,Q" + quadcopters[ndx].idNumber);
                 }
             }

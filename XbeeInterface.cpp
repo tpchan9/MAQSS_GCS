@@ -4,6 +4,7 @@ XbeeInterface::XbeeInterface(QObject *parent) : QObject(parent)
 {
     qDebug() << "Instantiating single_test class";
     serial_interface.ReadHandler = std::bind(&XbeeInterface::callbackFun, this, std::placeholders::_1);
+//    serial_interface.Connect();
     serial_interface.AsyncReadFrame();
 }
 
