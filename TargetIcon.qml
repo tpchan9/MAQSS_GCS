@@ -11,7 +11,8 @@ MapQuickItem {
 
     sourceItem: Image {
         id: image
-        source: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Button_Icon_Red.svg/120px-Button_Icon_Red.svg.png"
+//        source: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Button_Icon_Red.svg/120px-Button_Icon_Red.svg.png"
+        source: "images/target.png"
         height: 15
         width: 15
     }

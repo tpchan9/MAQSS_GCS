@@ -19,10 +19,12 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     // must register types before loading application
-    qmlRegisterSingletonType<XbeeInterface>("XbeeInterface", 1, 0, "XbeeInterface", singleton_MessageHandler);
+    qmlRegisterSingletonType<XbeeInterface>("XbeeInterfaceClass", 1, 0, "XbeeInterface", singleton_MessageHandler);
 
+    qDebug() << "App not loaded yet";
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+
 
     return app.exec();
 }

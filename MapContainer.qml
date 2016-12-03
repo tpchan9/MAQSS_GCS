@@ -14,8 +14,8 @@ Rectangle {
     property var searchChunkContainer: []
     property var quadcopterIcons: []
     property var targetIcons: []
-    property real startLat: 35.308806
-    property real startLon: -120.668194
+    property real startLat: 35.32796246271536
+    property real startLon: -120.75197292670919
 
     width: mapWidth
     height: mapHeight
@@ -50,7 +50,9 @@ Rectangle {
             id: mark1
             sourceItem: Image {
                 id: image1
-                source: "http://icons.iconarchive.com/icons/paomedia/small-n-flat/128/map-marker-icon.png"
+//                source: "http://icons.iconarchive.com/icons/paomedia/small-n-flat/128/map-marker-icon.png"
+                source: "images/marker.png"
+                opacity: 0
                 scale: 0.1
                 height: 50
                 width: 50
@@ -64,8 +66,10 @@ Rectangle {
             id: mark2
             sourceItem: Image {
                 id: image2
-                source: "http://icons.iconarchive.com/icons/paomedia/small-n-flat/128/map-marker-icon.png"
+//                source: "http://icons.iconarchive.com/icons/paomedia/small-n-flat/128/map-marker-icon.png"
+                source: "images/marker.png"
                 scale: 0.1
+                opacity: 0
                 height: 50
                 width: 50
             }
@@ -91,9 +95,11 @@ Rectangle {
 
                     if (pointsCaptured === 0 ) {
                         mark1.coordinate = map.toCoordinate(Qt.point(mouse.x, mouse.y))
+                        image1.opacity = 100
                         mapPolygon.path = []
                     }
                     else if (pointsCaptured === 1) {
+                        image2.opacity = 100
                         mark2.coordinate = map.toCoordinate(Qt.point(mouse.x, mouse.y))
                     }
                     pointsCaptured += 1

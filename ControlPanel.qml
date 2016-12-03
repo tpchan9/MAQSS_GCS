@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
-import XbeeInterface 1.0
+import XbeeInterfaceClass 1.0
 import "js_resources/Transforms.js" as Transforms
 import "js_resources/Coordinates.js" as Coordinates
 
@@ -49,6 +49,36 @@ Rectangle {
         }
     }
 
+    // Button to start/stop comms
+    Button {
+        id: commsButton
+        state: "Stopped"
+        anchors {
+            left: captureButton.left
+            bottom: captureButton.top
+            bottomMargin: controlPanelPadding/2
+        }
+        width: buttonWidth
+        height: buttonHeight
+        text: qsTr("Comms OFF")
+        highlighted: false
+        checkable: true
+        states: State {
+            name: "Started"; when: commsButton.checked
+            PropertyChanges {target:commsButton; text: qsTr("Comms ON")}
+        }
+
+        onClicked: {
+            if (commsButton.state === "Started") {
+                XbeeInterface.startComms();
+            }
+            else {
+                XbeeInterface.stopComms()
+            }
+
+        }
+    }
+
     // Button to transition into mission capture mode
     Button {
         id: captureButton
@@ -90,7 +120,6 @@ Rectangle {
 
         // Evaluate state when clicked
         onClicked: {
-            console.log("Press")
             var ndx;
 
             // Start state, allocate search Chunks and send msg off to vehicles
@@ -110,7 +139,7 @@ Rectangle {
 
                     // each element of the quadcopters array is a Quadcopter.qml object
                     // TODO: Remove double write once xbeeplus library is fixed (read works 100%)
-//                    XbeeInterface.writeMsg("NEWMSG,START,Q" + quadcopters[ndx].idNumber);
+                    //                    XbeeInterface.writeMsg("NEWMSG,START,Q" + quadcopters[ndx].idNumber);
                     XbeeInterface.writeMsg("NEWMSG,START,Q" + quadcopters[ndx].idNumber);
                 }
             }
@@ -121,7 +150,7 @@ Rectangle {
                 currentMsg = "Halting Mission"
                 messageBox.write(currentMsg)
                 for (ndx = 0; ndx < quadcopters.length; ndx++) {
-//                    XbeeInterface.writeMsg("NEWMSG,STOP,Q" + quadcopters[ndx].idNumber);
+                    //                    XbeeInterface.writeMsg("NEWMSG,STOP,Q" + quadcopters[ndx].idNumber);
                     XbeeInterface.writeMsg("NEWMSG,STOP,Q" + quadcopters[ndx].idNumber);
                 }
             }

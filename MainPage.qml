@@ -1,7 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
-import XbeeInterface 1.0
+import XbeeInterfaceClass 1.0
 import "js_resources/Utils.js" as Utils
 import "js_resources/Messaging.js" as Messaging
 
@@ -34,7 +34,7 @@ Item {
     property bool capture: false    // stores if UI is in capture mode
     property bool missionSet: false // store if mission has been set by user
 
-    property real field_angle: 139.7
+    property real field_angle: 154
     property var searchAreaCoords: []
     property var searchChunkCoords: [] // javascript array of nQuickSearch elements. Each element is a 5 element array of [lat lon alt] (3D array)
     property var searchChunkMessages: [] // string specifying search chunk
@@ -53,6 +53,8 @@ Item {
         id: testRoot
         Component.onCompleted: {
             XbeeInterface.newMsg.connect(handleNewMsg)
+            XbeeInterface.baudrate = 57600
+            console.log(XbeeInterface.baudrate)
         }
     }
 
@@ -163,7 +165,7 @@ Item {
         if (msg_container.msgType !== "INVALID") {
         // wait for Quadcopter.qml component to be created
         component = Qt.createComponent("Quadcopter.qml")
-        console.log(component.errorString())
+//        console.log(component.errorString())
         while (component.status !== Component.Ready) {
         }
 

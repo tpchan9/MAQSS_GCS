@@ -20,6 +20,7 @@ enum class QuadAddress : uint64_t {
 class XbeeInterface : public QObject
 {
     Q_OBJECT
+//    Q_PROPERTY (int baudrate READ baudrate WRITE setBaudrate NOTIFY baudrateChanged)
 public:
     explicit XbeeInterface(QObject *parent = 0);
 
@@ -36,10 +37,14 @@ public:
 
     Q_INVOKABLE void writeMsg(QString msg);
 
+    Q_INVOKABLE void startComms();
+    Q_INVOKABLE void stopComms();
+
+    ~XbeeInterface() {}
 
 signals:
     void newMsg(const QString &item);
-//    void setSignal(QVariant sign);
+    void baudrateChanged(int newValue);
 
 public slots:
 //    void handleSignalExample(const QVariant& object);
@@ -49,6 +54,7 @@ private:
     QString m_name;
     QString m_device;
     int m_baudrate;
+    bool comms = false;
 
     // TODO: Refactor to not be hardcoded
     XBEE::SerialXbee serial_interface;
@@ -64,7 +70,9 @@ static QObject *singleton_MessageHandler(QQmlEngine *engine, QJSEngine *scriptEn
     Q_UNUSED(engine)
     Q_UNUSED(scriptEngine)
 
+    qDebug() << "Instantiate Here?";
     XbeeInterface *msgs = new XbeeInterface();
+    qDebug() << "Finished instantiation here?";
     return msgs;
 }
 #endif // XBEEINTERFACE_HPP

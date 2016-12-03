@@ -3,23 +3,28 @@
 XbeeInterface::XbeeInterface(QObject *parent) : QObject(parent)
 {
     qDebug() << "Instantiating single_test class";
+    sleep(1);
     serial_interface.ReadHandler = std::bind(&XbeeInterface::callbackFun, this, std::placeholders::_1);
 //    serial_interface.Connect();
-    serial_interface.AsyncReadFrame();
+//    serial_interface.AsyncReadFrame();
+    qDebug() << "Finished instantiating single_test class";
 }
 
 void XbeeInterface::callbackFun(XBEE::Frame *item) {
 
+        qDebug() << "Entered Callback";
     // ReceivePacket pointer
     // dynamic cast to type of frame I think it is (ReceivePacket), store in pointer
     XBEE::ReceivePacket *r_packet = dynamic_cast<XBEE::ReceivePacket*>(item);
     std::string str_data;
 
-    qDebug() << "Entered Callback";
+
 
     // check if pointer is NULL
     if (r_packet != NULL) {
+        qDebug() << "Starting GetData";
         str_data = r_packet->GetData();
+
         std::cout << "Data: " << str_data.c_str() << std::endl;
     }
 
@@ -32,6 +37,7 @@ void XbeeInterface::callbackFun(XBEE::Frame *item) {
 void XbeeInterface::writeMsg(QString msg) {
     // Assumes msg is of the form NEWMSG,TYPE,QX,....
 
+    if (comms) {
     // Split string by , to determine target
     qDebug() << "Writing Msg: " << msg;
     QStringList list1 = msg.split(',', QString::SkipEmptyParts);
@@ -68,6 +74,22 @@ void XbeeInterface::writeMsg(QString msg) {
         serial_interface.AsyncWriteFrame(&frame_d);
         break;
     }
+    }
+    else qDebug() << "Serial Interface not established. Start First";
+}
+
+void XbeeInterface::startComms() {
+
+    qDebug() << "Starting Serial Interface";
+    serial_interface.Connect();
+    serial_interface.AsyncReadFrame();
+    comms = true;
+}
+
+void XbeeInterface::stopComms() {
+    qDebug() << "Stopping Serial Interface";
+    serial_interface.Stop();
+    comms = false;
 }
 
 /*

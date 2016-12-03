@@ -1,8 +1,10 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtPositioning 5.3
+import QtLocation 5.4
+import QtGraphicalEffects 1.0
 
 // functions as datacontainer for data about 1 quadcopter (an array of these is stored)
-Item {
+MapQuickItem {
     id: quadcopter
 
     property var coordLLA: [0, 0, 0]
@@ -13,5 +15,7 @@ Item {
 
     // automatically set the name when idNumber changes
     onIdNumberChanged: name = "Quad" + String.fromCharCode('A'.charCodeAt() + idNumber)
+
+
 
 }
