@@ -12,7 +12,6 @@ Rectangle {
     property int mapWidth
     property int mapHeight
     property var searchChunkContainer: []
-    property var quadcopterIcons: []
     property var targetIcons: []
     property real startLat: 35.32796246271536
     property real startLon: -120.75197292670919
@@ -132,7 +131,6 @@ Rectangle {
         var polygonCoord = Coordinates.calculateCoords(mark1.coordinate, mark2.coordinate, mainPage.field_angle)
         var i1,j1
         var component
-        var iconComponent
         var tmp_coord
         var target_icon_component;
 
@@ -182,7 +180,7 @@ Rectangle {
         currentMsg = "Search area added with " + nQuickSearch + " search chunks at " + field_angle + "° heading" +"\n\tCorners at: " + searchAreaCoords[0] + ", " + searchAreaCoords[2]
         messageBox.write(currentMsg)
 
-        iconComponent = Qt.createComponent("QuadcopterIcon.qml")
+//        iconComponent = Qt.createComponent("QuadcopterIcon.qml")
         for (i1 = 0; i1 < quadcopters.length; i1++ ) {
 //            tt = GPS.midPoint(searchChunkCoords[0][0],searchChunkCoords[0][2])
 //            console.log(searchAreaCoords)
@@ -191,14 +189,9 @@ Rectangle {
 
             // render the quadcopter icon at the starting coord
             tmp_coord = QtPositioning.coordinate(quadcopters[i1].coordLLA[0], quadcopters[i1].coordLLA[1])
-
-            // if icon doesnt exist, create
-            if (quadcopterIcons.length <= i1) {
-                quadcopterIcons[i1] = iconComponent.createObject(map)
-            }
-            quadcopterIcons[i1].coordinate = tmp_coord
-            quadcopterIcons[i1].iconColor = quadcopterIcons[i1].availableColors[quadcopters[i1].idNumber]
-            map.addMapItem(quadcopterIcons[i1])
+            quadcopters[i1].coordinate = tmp_coord
+            quadcopters[i1].iconColor = quadcopters[i1].availableColors[quadcopters[i1].idNumber]
+            map.addMapItem(quadcopters[i1])
         }
 
         // Create target icons
