@@ -8,7 +8,6 @@
         <file>MapContainer.qml</file>
         <file>SearchChunk.qml</file>
         <file>Quadcopter.qml</file>
-        <file>QuadcopterIcon.qml</file>
         <file>TargetIcon.qml</file>
         <file>js_resources/Messaging.js</file>
         <file>js_resources/Coordinates.js</file>
