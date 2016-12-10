@@ -14,6 +14,7 @@ Rectangle {
     property int labelFontSize: 12
 
     property int vehicleFontSize: 12
+    property bool roleCheckable: true
 
     signal updateStatus(bool update)
 
@@ -109,7 +110,7 @@ Rectangle {
                 text: role
                 height: statusText.height
                 highlighted: false
-                checkable: true
+                checkable: vehicleStatusBox.roleCheckable
 
                 states: State {
                     name: "Detailed"; when: roleToggle.checked
@@ -129,6 +130,7 @@ Rectangle {
                     }
                 }
             }
+            height: roleToggle.height
         }
     }
 

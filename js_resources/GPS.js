@@ -28,7 +28,6 @@ function arrDistance(coord1, coord2) {
     var dphi = phi2 - phi1
     var dlam = lam2 - lam1
     var Rearth = 6371000 // radius of earth [m]
-
     var a, c
     a = Math.pow(Math.sin(dphi/2),2) + Math.cos(phi1) * Math.cos(phi2) * Math.pow(Math.sin(dlam/2),2)
     c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
@@ -43,7 +42,6 @@ function bearing(coord1,coord2) {
     var phi2 = coord2.latitude * Math.PI/180
     var lam1 = coord1.longitude * Math.PI/180
     var lam2 = coord2.longitude * Math.PI/180
-    //    var dphi = phi2 - phi1
     var dlam = lam2 - lam1
     var Rearth = 6371000 // radius of earth [m]
     var X,Y

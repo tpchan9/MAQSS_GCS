@@ -126,6 +126,7 @@ Rectangle {
             if (startSwitch.state === "Started") {
 
                 captureButton.checkable = false
+                vehicleStatusBox.roleCheckable = false;
                 console.log("Started")
                 startSignal(mainPage)
                 currentMsg = "Starting Mission -- Transmitting"
@@ -136,6 +137,7 @@ Rectangle {
 
                 // Write msg to Quads here
                 for (ndx = 0; ndx < msg.length; ndx++) {
+
                     if (!quadcopters[ndx].role) { // if role = 0 ("Quick")
                         console.log("Role: ", quadcopters[ndx].role, "at ndx: ", ndx);
                         XbeeInterface.writeMsg(msg[ndx]);
@@ -147,6 +149,7 @@ Rectangle {
             // stop state, send STOP signal to all vehicles
             else {
                 captureButton.checkable = true
+                vehicleStatusBox.roleCheckable = true;
                 currentMsg = "Halting Mission"
                 messageBox.write(currentMsg)
                 for (ndx = 0; ndx < quadcopters.length; ndx++) {

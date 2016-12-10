@@ -59,10 +59,8 @@ function handleGenericMsg(msg) {
         msg_container.vehicleID = parseInt(split_msg[2][1]);
         msg_container.vehicleLocation = Utils.strToFloat((split_msg[3].substr(1)).split(":"));
         msg_container.vehicleStatus = split_msg[4].substr(1);
-//        msg_container.vehicleRole = parseInt(split_msg[5][1]);
-
-        // TODO: Replace this with a parsing of the role
-        msg_container.vehicleRole = 0;
+        msg_container.vehicleRole = parseInt(split_msg[5][1]);
+        console.log("Reported Role: " , msg_container.vehicleRole);
 
         // TODO: Change this to POI and make a TGT for verified targets
         // if msg is a TGT type, append target location information
