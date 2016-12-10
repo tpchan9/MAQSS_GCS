@@ -174,7 +174,7 @@ Item {
             if (quadcopters[i1].idNumber === msg_container.vehicleID) {
                 quadcopters[i1].coordLLA = msg_container.vehicleLocation
                 quadcopters[i1].status = msg_container.vehicleStatus
-                quadcopters[i1].role = msg_container.vehicleRole
+//                quadcopters[i1].role = msg_container.vehicleRole
                 done_flag = true // set flag to indicate frame has been processed
             }
         }
@@ -197,6 +197,7 @@ Item {
             else nDetailedSearch++
         }
 
+        // TODO: Change this to handle a POI msg
         // handle a target location msg
         if (msg_container.msgType === "TGT" ) {
             var target_component;
@@ -209,10 +210,25 @@ Item {
 
             // warn object creation error
             if (targets[next_target_ndx] === null) console.log("Error Creating TargetIcon Object")
-            currentMsg = "Target Found at: " + targets[next_target_ndx].coordLLA;
+            currentMsg = "Point of Interest Found at: " + targets[next_target_ndx].coordLLA;
             messageBox.write(currentMsg);
             console.log(currentMsg);
+
+            // loops through quadcopters to search for a detailed search vehicle
+            for (i1 = 0; i1 < quadcopters.length; i1++) {
+
+                // if detailed search vehicle available, send POI msg
+                if (quadcopters[i1].role) {
+                    XbeeInterface.writeMsg(generatePOIMsg(msg_container, i1));
+                    currentMsg = "Writing POI Msg to Vehicle" + i1;
+                    messageBox.write(currentMsg);
+                    console.log(currentMsg)
+                    break;
+                }
+            }
         }
+
+        // TODO: Add handle TGT msg which marks the POI as verified
 
         // send vehicleStatusBox an updateStatus signal
         vehicleStatusBox.updateStatus(true)
@@ -220,5 +236,3 @@ Item {
         }
     }
 }
-
-

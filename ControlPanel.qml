@@ -133,14 +133,14 @@ Rectangle {
 
                 // run function to allocate quadcopters to closest point
                 var msg = Coordinates.allocateSearchChunks(mainPage.searchChunkCoords, mainPage.vehicleCoords, mainPage.field_angle)
-                // TODO: Write msg to Quads here
-                for (ndx = 0; ndx < msg.length; ndx++) {
-                    XbeeInterface.writeMsg(msg[ndx]);
 
-                    // each element of the quadcopters array is a Quadcopter.qml object
-                    // TODO: Remove double write once xbeeplus library is fixed (read works 100%)
-                    //                    XbeeInterface.writeMsg("NEWMSG,START,Q" + quadcopters[ndx].idNumber);
-                    XbeeInterface.writeMsg("NEWMSG,START,Q" + quadcopters[ndx].idNumber);
+                // Write msg to Quads here
+                for (ndx = 0; ndx < msg.length; ndx++) {
+                    if (!quadcopters[ndx].role) { // if role = 0 ("Quick")
+                        console.log("Role: ", quadcopters[ndx].role, "at ndx: ", ndx);
+                        XbeeInterface.writeMsg(msg[ndx]);
+                        XbeeInterface.writeMsg("NEWMSG,START,Q" + quadcopters[ndx].idNumber);
+                    }
                 }
             }
 
@@ -150,8 +150,9 @@ Rectangle {
                 currentMsg = "Halting Mission"
                 messageBox.write(currentMsg)
                 for (ndx = 0; ndx < quadcopters.length; ndx++) {
-                    //                    XbeeInterface.writeMsg("NEWMSG,STOP,Q" + quadcopters[ndx].idNumber);
-                    XbeeInterface.writeMsg("NEWMSG,STOP,Q" + quadcopters[ndx].idNumber);
+                    if (!quadcopters[ndx].role) { // if role = 0 ("Quick")
+                        XbeeInterface.writeMsg("NEWMSG,STOP,Q" + quadcopters[ndx].idNumber);
+                    }
                 }
             }
         }

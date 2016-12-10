@@ -12,6 +12,7 @@ MapQuickItem {
     property int idNumber: -1 // this probably shouldnt be working
     property string status
     property int role: 0 // 0 is quick search, 1 is detailed search
+    property var roles: ["Quick","Detailed"]
     property var availableColors: ["dark blue", "green", "red", "blue", "violet","yellow","black","white"]
     property string iconColor: "black"
 

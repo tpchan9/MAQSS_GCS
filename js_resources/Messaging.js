@@ -64,6 +64,7 @@ function handleGenericMsg(msg) {
         // TODO: Replace this with a parsing of the role
         msg_container.vehicleRole = 0;
 
+        // TODO: Change this to POI and make a TGT for verified targets
         // if msg is a TGT type, append target location information
         if (msg_container.msgType === "TGT") {
             console.log("Handle TGT Msg");
@@ -80,5 +81,17 @@ function handleGenericMsg(msg) {
 
     // Return msg information for update
     return msg_container;
+}
+
+function generatePOIMsg(msg_container, targetQuad) {
+    // NEWMSG,POI,QX,P35.123456 120.123456
+    // check msgType is correct
+
+    var msg;
+    // check targetQuad is not msg_container.vehicleID (quick vehicle cannot also be detailed vehicle)
+    if (msg_container.vehicleID !== targetQuad)
+     msg = "NEWMSG,POI,Q" + msg_container.targetQuad + ",P" + msg_container.targetLocation[0] + ":" + msg_container.targetLocation[1]
+
+    return msg;
 }
 

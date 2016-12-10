@@ -9,8 +9,7 @@ Rectangle {
     property bool titleBold: true
     property int titleFontSize: 13
 
-    property string label1: "Vehicle"
-    property string label2: "Status"
+    property var labels: ["Vehicle","Status","Role"]
     property bool labelBold: true
     property int labelFontSize: 12
 
@@ -53,7 +52,8 @@ Rectangle {
 
         // update vehicle status display
         for (i1 = 0; i1< quadcopters.length; i1++ ) {
-            vehicleModel.set(i1, {name: quadcopters[i1].name, status: quadcopters[i1].status})
+            vehicleModel.set(i1, {name: quadcopters[i1].name, status: quadcopters[i1].status, arrayNdx: i1})
+            vehicleModel.set(i1, {role: quadcopters[i1].roles[quadcopters[i1].role], vehicleID: quadcopters[i1].idNumber})
         }
     }
 
@@ -71,7 +71,7 @@ Rectangle {
             border.color: "transparent"
         }
 
-        text: label1 + " \t\t" + label2
+        text: labels[0] + " \t" + labels[1] + " \t" + labels[2]
         font {
             bold: labelBold
             pointSize: labelFontSize
@@ -87,10 +87,47 @@ Rectangle {
 
     Component {
         id: vehicleComponent
-        Text {
-            text: name + " \t\t" + status
-            font {
-                pointSize: vehicleFontSize
+        Item {
+            property int vehicleID
+            property int arrayNdx // index of vehicle inside quadcopters array
+            Text {
+                id: statusText
+                text: name + " \t" + status + " \t"
+
+                font {
+                    pointSize: vehicleFontSize
+                }
+            }
+
+            Button {
+                id: roleToggle
+                state: "Quick"
+                anchors {
+                    left: statusText.right
+                }
+
+                text: role
+                height: statusText.height
+                highlighted: false
+                checkable: true
+
+                states: State {
+                    name: "Detailed"; when: roleToggle.checked
+                    PropertyChanges {target:roleToggle; text: qsTr("Detailed")}
+                }
+
+                onClicked: {
+                    if (roleToggle.state === "Detailed") {
+                        quadcopters[arrayNdx].role = 1;
+                        console.log("Set Vehicle ID: ", vehicleID, " at ndx: ", arrayNdx, ", role: ", quadcopters[arrayNdx].role)
+                        console.log(roleToggle.state)
+                    }
+                    else {
+                        quadcopters[arrayNdx].role = 0;
+                        console.log("Set Vehicle ID: ", vehicleID, quadcopters[arrayNdx].role)
+                        console.log(roleToggle.state)
+                    }
+                }
             }
         }
     }
