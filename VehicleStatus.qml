@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
+import XbeeInterfaceClass 1.0
 
 Rectangle {
     property int vehicleStatusPadding: 10
@@ -53,8 +54,8 @@ Rectangle {
 
         // update vehicle status display
         for (i1 = 0; i1< quadcopters.length; i1++ ) {
-            vehicleModel.set(i1, {name: quadcopters[i1].name, status: quadcopters[i1].status, arrayNdx: i1})
-            vehicleModel.set(i1, {role: quadcopters[i1].roles[quadcopters[i1].role], vehicleID: quadcopters[i1].idNumber})
+            vehicleModel.set(i1, {name: quadcopters[i1].name, status: quadcopters[i1].status, role: quadcopters[i1].roles[quadcopters[i1].role]});
+            vehicleModel.setProperty(i1, "vehicleID", quadcopters[i1].idNumber);
         }
     }
 
@@ -89,8 +90,10 @@ Rectangle {
     Component {
         id: vehicleComponent
         Item {
+
+            // these arent getting set properly?
+            property int indexOfThisDelegate: index
             property int vehicleID
-            property int arrayNdx // index of vehicle inside quadcopters array
             Text {
                 id: statusText
                 text: name + " \t" + status + " \t"
@@ -112,21 +115,33 @@ Rectangle {
                 highlighted: false
                 checkable: vehicleStatusBox.roleCheckable
 
-                states: State {
-                    name: "Detailed"; when: roleToggle.checked
-                    PropertyChanges {target:roleToggle; text: qsTr("Detailed")}
-                }
+                states: [
+                    State {
+                        name: "Detailed"; when: roleToggle.checked
+                        PropertyChanges {target:roleToggle; text: qsTr("Detailed")}
+                    },
+                    State {
+                        name: "Quick"; when: !roleToggle.checked
+                        PropertyChanges {target:roleToggle; text: qsTr("Quick")}
+                    }
+
+                ]
 
                 onClicked: {
                     if (roleToggle.state === "Detailed") {
-                        quadcopters[arrayNdx].role = 1;
-                        console.log("Set Vehicle ID: ", vehicleID, " at ndx: ", arrayNdx, ", role: ", quadcopters[arrayNdx].role)
+                        console.log(index)
+                        quadcopters[index].role = 1;
+                        console.log("Set Vehicle ID: ", quadcopters[index].idNumber, " at ndx: ", index, ", role: ", quadcopters[index].role)
                         console.log(roleToggle.state)
                     }
                     else {
-                        quadcopters[arrayNdx].role = 0;
-                        console.log("Set Vehicle ID: ", vehicleID, quadcopters[arrayNdx].role)
+                        quadcopters[index].role = 0;
+                        console.log("Set Vehicle ID: ", vehicleID, quadcopters[index].role)
                         console.log(roleToggle.state)
+                    }
+
+                    if (vehicleStatusBox.roleCheckable) {
+                        XbeeInterface.writeMsg("NEWMSG,ROLE,Q" + quadcopters[index].idNumber + ",R" + quadcopters[index].role,quadcopters[index].idNumber)
                     }
                 }
             }
