@@ -153,7 +153,7 @@ Item {
           RX - Vehicle Role (0->Quick Scan, 1->Detailed Search)
           */
         var component
-        var tmp = new Array // arrays can have different data types
+        var tmp = new Array; // arrays can have different data types
         var i1;
         var msg_container;
         var done_flag = false
