@@ -9,8 +9,8 @@
 #include <functional>
 
 #include "XbeeInterface.hpp"
-#include "../../NGCP/xbeeplus/include/SerialXbee.hpp"
-#include "../../NGCP/xbeeplus/include/ReceivePacket.hpp"
+#include "../xbeeplus/include/SerialXbee.hpp"
+#include "../xbeeplus/include/ReceivePacket.hpp"
 
 
 int main(int argc, char *argv[])

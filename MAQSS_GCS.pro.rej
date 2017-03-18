@@ -1,0 +1,12 @@
+diff a/MAQSS_GCS.pro b/MAQSS_GCS.pro	(rejected hunks)
+@@ -3,8 +3,8 @@ QT += qml gui quick positioning location
+ CONFIG += c++11
+ 
+ SOURCES += main.cpp \
+-    ../xbeeplus/lib/ReceivePacket.cpp \
+-    ../xbeeplus/lib/SerialXbee.cpp \
++    ../xbeeplus/src/ReceivePacket.cpp \
++    ../xbeeplus/src/SerialXbee.cpp \
+ #    ../../NGCP/xbeeplus/lib/TransmitRequest.cpp \
+ #    ../../NGCP/xbeeplus/lib/Utility.cpp \
+     XbeeInterface.cpp

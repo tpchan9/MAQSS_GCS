@@ -6,8 +6,8 @@
 #include <QString>
 #include <QQmlContext>
 //#include "../../NGCP/xbeeplus/include/SerialXbee.hpp"
-#include "../../NGCP/xbeeplus/include/ReceivePacket.hpp"
-#include "../../NGCP/xbeeplus/include/TransmitRequest.hpp"
+#include "../xbeeplus/include/ReceivePacket.hpp"
+#include "../xbeeplus/include/TransmitRequest.hpp"
 
 enum class QuadAddress : uint64_t {
     QUADA = 0x0013A20040A8157E,

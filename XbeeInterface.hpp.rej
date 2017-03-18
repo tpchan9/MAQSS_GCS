@@ -1,0 +1,10 @@
+diff a/XbeeInterface.hpp b/XbeeInterface.hpp	(rejected hunks)
+@@ -5,7 +5,7 @@
+ #include <QDebug>
+ #include <QString>
+ #include <QQmlContext>
+-//#include "../xbeeplus/include/SerialXbee.hpp"
++#include "../xbeeplus/include/SerialXbee.hpp"
+ #include "../xbeeplus/include/ReceivePacket.hpp"
+ #include "../xbeeplus/include/TransmitRequest.hpp"
+ 

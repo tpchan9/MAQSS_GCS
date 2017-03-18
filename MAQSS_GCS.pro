@@ -3,10 +3,10 @@ QT += qml gui quick positioning location
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    ../../NGCP/xbeeplus/lib/ReceivePacket.cpp \
-    ../../NGCP/xbeeplus/lib/SerialXbee.cpp \
-#    ../../NGCP/xbeeplus/lib/TransmitRequest.cpp \
-#    ../../NGCP/xbeeplus/lib/Utility.cpp \
+    ../xbeeplus/src/ReceivePacket.cpp \
+    ../xbeeplus/src/SerialXbee.cpp \
+#    ../../NGCP/xbeeplus/src/TransmitRequest.cpp \
+#    ../../NGCP/xbeeplus/src/Utility.cpp \
     XbeeInterface.cpp
     #../../NGCP/xbeeplus/test/main.cpp
 
@@ -34,8 +34,8 @@ DISTFILES += \
 
 HEADERS += \
 #    ../../NGCP/xbeeplus/include/Frame.hpp \
-    ../../NGCP/xbeeplus/include/ReceivePacket.hpp \
-    ../../NGCP/xbeeplus/include/SerialXbee.hpp \
+    ../xbeeplus/include/ReceivePacket.hpp \
+    ../xbeeplus/include/SerialXbee.hpp \
 #    ../../NGCP/xbeeplus/include/TransmitRequest.hpp \
 #    ../../NGCP/xbeeplus/include/Utility.hpp \
 #    ../../NGCP/xbeeplus/include/Xbee.hpp \

@@ -57,7 +57,7 @@ function handleGenericMsg(msg) {
         // Interpret
         console.log("Handle UPDT Msg");
         msg_container.vehicleID = parseInt(split_msg[2][1]);
-        msg_container.vehicleLocation = Utils.strToFloat((split_msg[3].substr(1)).split(":"));
+        msg_container.vehicleLocation = Utils.strToFloat((split_msg[3].substr(1)).split(" "));
         msg_container.vehicleStatus = split_msg[4].substr(1);
         msg_container.vehicleRole = parseInt(split_msg[5][1]);
         console.log("Reported Role: " , msg_container.vehicleRole);
@@ -66,7 +66,7 @@ function handleGenericMsg(msg) {
         // if msg is a TGT type, append target location information
         if (msg_container.msgType === "TGT") {
             console.log("Handle TGT Msg");
-            msg_container.targetLocation = Utils.strToFloat((split_msg[6].substr(1)).split(":"))
+            msg_container.targetLocation = Utils.strToFloat((split_msg[6].substr(1)).split(" "))
         }
 
     }
@@ -88,7 +88,7 @@ function generatePOIMsg(msg_container, targetQuad) {
     var msg;
     // check targetQuad is not msg_container.vehicleID (quick vehicle cannot also be detailed vehicle)
     if (msg_container.vehicleID !== targetQuad)
-     msg = "NEWMSG,POI,Q" + msg_container.targetQuad + ",P" + msg_container.targetLocation[0] + ":" + msg_container.targetLocation[1]
+     msg = "NEWMSG,POI,Q" + msg_container.targetQuad + ",P" + msg_container.targetLocation[0] + " " + msg_container.targetLocation[1]
 
     return msg;
 }
