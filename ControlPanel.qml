@@ -13,6 +13,14 @@ Rectangle {
     property int buttonWidth: controlPanelBox.width/2
     property bool captureState: false
     property var searchChunkMessages: []
+    property real corner1Lat: 0
+    property real corner1Long: 0
+    property bool corner1LatSet: false
+    property bool corner1LongSet: false
+    property real corner2Lat: 0
+    property real corner2Long: 0
+    property bool corner2LatSet: false
+    property bool corner2LongSet: false
 
     // States for capturing/waiting to change CaptureButton behavior and appearance
     states: [
@@ -48,6 +56,71 @@ Rectangle {
             mapContainer.update()
         }
     }
+
+/*    TextField {
+        id: corner1InputLat
+        color: "black"
+        anchors {
+            left: controlPanelBox.left
+            leftMargin:0
+        }
+        height: buttonHeight
+        width: buttonWidth
+        placeholderText: qsTr("Corner 1 Lat")
+        onEditingFinished: {
+            corner1Lat = parseFloat(text)
+            corner1LatSet = true
+        }
+    }
+    TextField {
+        id: corner1InputLong
+        color: "black"
+        anchors {
+            left: corner1InputLat.right
+            leftMargin:0
+        }
+        height: buttonHeight
+        width: buttonWidth
+        placeholderText: qsTr("Corner1 Long")
+        onEditingFinished: {
+            corner1Long = parseFloat(text)
+            corner1LongSet = true
+        }
+    }
+
+    TextField {
+        id: corner2InputLat
+        color: "black"
+        anchors {
+            top: controlPanelBox.bottom
+            left: controlPanelBox.left
+            leftMargin:0
+        }
+        height: buttonHeight
+        width: buttonWidth
+        placeholderText: qsTr("Corner 2 Lat")
+        onEditingFinished: {
+            corner2Lat = parseFloat(text)
+            corner2LatSet = true
+        }
+    }
+    TextField {
+        id: corner2InputLong
+        color: "black"
+        anchors {
+            top: controlPanelBox.bottom
+            left: corner2InputLat.right
+            leftMargin:0
+        }
+        height: buttonHeight
+        width: buttonWidth
+        placeholderText: qsTr("Corner 2 Long")
+        onEditingFinished: {
+            corner2Long = parseFloat(text)
+            corner2LongSet = true
+        }
+    }
+    */
 
     // Button to start/stop comms
     Button {
@@ -94,6 +167,9 @@ Rectangle {
         text: qsTr("Set Mission")
         highlighted: false
         checkable: true
+        onClicked: {
+            mapContainer.check()
+        }
     }
 
     // Switch to toggle mission start (send search chunks off to vehicles)

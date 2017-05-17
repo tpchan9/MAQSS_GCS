@@ -15,6 +15,8 @@ Rectangle {
     property var targetIcons: []
     property real startLat: 35.32796246271536
     property real startLon: -120.75197292670919
+    property bool corner1Set: false
+    property bool corner2Set: false
 
     width: mapWidth
     height: mapHeight
@@ -42,7 +44,6 @@ Rectangle {
         zoomLevel: 18.5
         activeMapType: map.supportedMapTypes[5]
 
-        // TODO: Make icons load from local files
         // TODO: Make these not show up before a mission has been set
         // Two marker icons
         MapQuickItem {
@@ -51,14 +52,14 @@ Rectangle {
                 id: image1
 //                source: "http://icons.iconarchive.com/icons/paomedia/small-n-flat/128/map-marker-icon.png"
                 source: "images/marker.png"
-                opacity: 0
+                opacity: .1
                 scale: 0.1
                 height: 50
                 width: 50
             }
             anchorPoint.x: image1.width/2
             anchorPoint.y: image1.height
-            coordinate: map.center
+            coordinate: QtPositioning.coordinate(35.32814040870949, -120.7519096842783, 0)
         }
 
         MapQuickItem {
@@ -68,13 +69,13 @@ Rectangle {
 //                source: "http://icons.iconarchive.com/icons/paomedia/small-n-flat/128/map-marker-icon.png"
                 source: "images/marker.png"
                 scale: 0.1
-                opacity: 0
+                opacity: .1
                 height: 50
                 width: 50
             }
             anchorPoint.x: image2.width/2
             anchorPoint.y: image2.height
-            coordinate: map.center
+            coordinate: QtPositioning.coordinate(35.32781726153697, -120.75204994659205, 0)
         }
 
         // Rectangle between marker icons
@@ -120,14 +121,44 @@ Rectangle {
                 else {
                     console.log("Point Capture Not Enabled")
                     var pt = map.toCoordinate(Qt.point(mouse.x, mouse.y));
-                    console.log(pt.latitude, pt.longitude, pt.altitude)
+                    console.log(pt.latitude)
+                    console.log(pt.longitude)
                 }
             }
         }
     }
 
-    function update() {
+    function check() {
+        if (controlPanelBox.captureState) {
+        if (controlPanelBox.corner1LatSet && controlPanelBox.corner1LongSet) {
+            corner1Set = true
+            mark1.coordinate = QtPositioning.coordinate(controlPanelBox.corner1Lat, controlPanelBox.corner1Long, 0)
+            image1.opacity = 100
+            controlPanelBox.corner1LatSet = false
+            controlPanelBox.corner1LongSet = false
+        }
+        if (controlPanelBox.corner2LatSet && controlPanelBox.corner2LongSet) {
+            corner2Set = true
+            mark2.coordinate = QtPositioning.coordinate(controlPanelBox.corner2Lat, controlPanelBox.corner2Long, 0)
+            image2.opacity = 100
+            controlPanelBox.corner2LatSet = false
+            controlPanelBox.corner2LongSet = false
+        }
 
+        if (corner1Set && corner2Set) {
+            corner1Set = false
+            corner2Set = false
+            controlPanelBox.captureState = false
+            controlPanelBox.state = "Waiting"
+            currentMsg = "Marker Distance: " + GPS.distance(mark1.coordinate,mark2.coordinate) + ", Marker Bearing: " + GPS.bearing(mark1.coordinate,mark2.coordinate)
+            messageBox.write(currentMsg)
+            update()
+        }
+        }
+
+    }
+
+    function update() {
         var polygonCoord = Coordinates.calculateCoords(mark1.coordinate, mark2.coordinate, mainPage.field_angle)
         var i1,j1
         var component
