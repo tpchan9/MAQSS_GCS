@@ -168,8 +168,8 @@ Rectangle {
         // Update main search Area
         mapPolygon.path = []
         for (i1 = 0; i1 < 5; i1++) {
-
             // add corner of search area rectangleS
+
             searchAreaCoords[i1] = QtPositioning.coordinate(polygonCoord[i1][0], polygonCoord[i1][1], polygonCoord[i1][2])
             mapPolygon.addCoordinate(searchAreaCoords[i1])
         }
@@ -181,8 +181,9 @@ Rectangle {
         // clear old search chunks
         if (searchChunkContainer.length > 0) {
             for (i1 = 0; i1 < searchChunkContainer.length; i1++) {
-                searchChunkContainer[i1].destroy()
+                searchChunkContainer[i1].parent = null
             }
+            searchChunkContainer = []
         }
 
         // TODO: Implement reuse of MapPolygons instead of destruction (reduce computation time)
@@ -231,6 +232,12 @@ Rectangle {
 
             targets[i1].coordinate = tmp_coord;
             map.addMapItem(targets[i1]);
+        }
+        for (i1 = 0; i1 < valid.length; i1++) {
+            tmp_coord = QtPositioning.coordinate(valid[i1].coordLLA[0], valid[i1].coordLLA[1], valid[i1].coordLLA[2]);
+
+            valid[i1].coordinate = tmp_coord;
+            map.addMapItem(valid[i1]);
         }
     }
 }

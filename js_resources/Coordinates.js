@@ -29,6 +29,10 @@ function findBestCombo(midPointDistances, combos, costFun) {
     for (i1 = 0; i1 < combos.length; i1++ ) {
         travelDistances[i1] = new Array;
         for (j1 = 0; j1 < midPointDistances[0].length; j1++ ) {
+            console.log("Setting combos: ", i1, "quad: ", j1, "quadrant");
+            console.log("travel distance [i][j]", travelDistances[i1][j1]);
+            console.log("combo select quad: ", combos[i1][j1]);
+            console.log("midpoint distance for combo quad", midPointDistances[j1][combos[i1][j1]]);
             travelDistances[i1][j1] = midPointDistances[j1][combos[i1][j1]];
         }
         maxD[i1] = Utils.max(travelDistances[i1])[0];
@@ -80,9 +84,22 @@ function allocateSearchChunks(searchChunks, vehicleCoords, fieldHeading) {
         // find midpoint of each searchChunk
         midPoints[i1] = GPS.midPoint(searchChunks[i1][0], searchChunks[i1][2]);
         midPointDistances[i1] = new Array
-        for (j1 = 0; j1 < n; j1++) midPointDistances[i1][j1] = GPS.arrDistance(vehicleCoords[j1], midPoints[i1]);
-
+        for (j1 = 0; j1 < quadcopters.length; j1++){
+            midPointDistances[i1][j1] = GPS.arrDistance(vehicleCoords[j1], midPoints[i1]);
+        }
         // store initial selection of choice
+
+        var maxDist = Utils.max(midPointDistances[i1])[0];
+
+        //for (j1 = 0; j1 < quadcopters.length; j1++) {
+            //if (quadcopters[j1].role === 1) {
+                //midPointDistances[i1][j1] += maxDist;
+            //}
+        //}
+
+        while (quadcopters[Utils.min(midPointDistances[i1])[1]].role === 1)
+            midPointDistances[i1][Utils.min(midPointDistances[i1])[1]] = Utils.max(midPointDistances[i1])[0] + 1;
+
         choice[i1] = Utils.min(midPointDistances[i1])[1];
     }
 
@@ -91,12 +108,12 @@ function allocateSearchChunks(searchChunks, vehicleCoords, fieldHeading) {
 
     // if everything doesnt work out first time
     if (uniqueElements.length !== n) {
-
+        console.log("permuntation")
         // create permutations and perform n! calculations
         // TODO: Implement better algorithm that isnt O(n!)
         var combos = new Array;
         var maxD = new Array;
-        var arr = Utils.range(n)
+        var arr = Utils.range(quadcopters.length)
         Utils.heapsPermute(arr , combos);
         console.log(combos);
         choice = findBestCombo(midPointDistances, combos, CostFunctions.MIN_MAX_DIST);
@@ -143,7 +160,7 @@ function writeMsnString(searchChunks, vehicleCoords, choices, cornerChoices, fie
     // calculate distances before hand, should be the same for all vehicles (diagonal distance)
     distance = GPS.arrDistance(searchChunks[0][0], searchChunks[0][2]);
 
-    for (i1 = 0; i1 < vehicleCoords.length; i1 ++ ) {
+    for (i1 = 0; i1 < nQuickSearch; i1 ++ ) {
         startLocs[i1] = searchChunks[i1][cornerChoices[i1]];
 
         // calculate the heading for searchChunk

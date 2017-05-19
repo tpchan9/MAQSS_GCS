@@ -128,19 +128,28 @@ Rectangle {
                 ]
 
                 onClicked: {
-                    if (roleToggle.state === "Detailed") {
-                        console.log(index)
-                        quadcopters[index].role = 1;
-                        console.log("Set Vehicle ID: ", quadcopters[index].idNumber, " at ndx: ", index, ", role: ", quadcopters[index].role)
-                        console.log(roleToggle.state)
-                    }
-                    else {
-                        quadcopters[index].role = 0;
-                        console.log("Set Vehicle ID: ", vehicleID, quadcopters[index].role)
-                        console.log(roleToggle.state)
-                    }
-
                     if (vehicleStatusBox.roleCheckable) {
+                        if (roleToggle.state === "Detailed") {
+                            console.log(index)
+                            quadcopters[index].role = 1;
+                            console.log("Set Vehicle ID: ", quadcopters[index].idNumber, " at ndx: ", index, ", role: ", quadcopters[index].role)
+                            console.log(roleToggle.state)
+                            nQuickSearch--
+                            nDetailedSearch++
+                            console.log("QUICK SEARCH NUM")
+                            console.log(nQuickSearch)
+                            console.log(nDetailedSearch)
+                        }
+                        else {
+                            quadcopters[index].role = 0;
+                            console.log("Set Vehicle ID: ", vehicleID, quadcopters[index].role)
+                            console.log(roleToggle.state)
+                            nQuickSearch++
+                            nDetailedSearch--
+                            console.log("QUICK SEARCH NUM AFTER IS QUICKSEARCH")
+                            console.log(nQuickSearch)
+                            console.log(nDetailedSearch)
+                        }
                         XbeeInterface.writeMsg("NEWMSG,ROLE,Q" + quadcopters[index].idNumber + ",R" + quadcopters[index].role,quadcopters[index].idNumber)
                     }
                 }

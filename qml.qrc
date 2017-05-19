@@ -14,5 +14,6 @@
         <file>js_resources/GPS.js</file>
         <file>js_resources/Transforms.js</file>
         <file>js_resources/Utils.js</file>
+        <file>ValidIcon.qml</file>
     </qresource>
 </RCC>

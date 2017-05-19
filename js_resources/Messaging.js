@@ -42,7 +42,8 @@ function handleGenericMsg(msg) {
         vehicleLocation:[0,0,0],
         vehicleStatus:"OFFLINE",
         vehicleRole:-1,
-        targetLocation:[0,0,0]
+        targetLocation:[0,0,0],
+        validLocation:[0,0,0]
     }
 
     // Make sure msg is valid
@@ -52,7 +53,7 @@ function handleGenericMsg(msg) {
     }
 
     // Check msg type
-    if (valid_msg && (msg_container.msgType === "UPDT" || msg_container.msgType === "TGT")) {
+    if (valid_msg && (msg_container.msgType === "UPDT" || msg_container.msgType === "TGT" || msg_container.msgType === "VLD")) {
 
         // Interpret
         console.log("Handle UPDT Msg");
@@ -67,6 +68,10 @@ function handleGenericMsg(msg) {
         if (msg_container.msgType === "TGT") {
             console.log("Handle TGT Msg");
             msg_container.targetLocation = Utils.strToFloat((split_msg[6].substr(1)).split(" "))
+        }
+        else if (msg_container.msgType === "VLD") {
+            console.log("Handle VLD Msg");
+            msg_container.validLocation = Utils.strToFloat((split_msg[6].substr(1)).split(" "))
         }
 
     }
@@ -88,7 +93,7 @@ function generatePOIMsg(msg_container, targetQuad) {
     var msg;
     // check targetQuad is not msg_container.vehicleID (quick vehicle cannot also be detailed vehicle)
     if (msg_container.vehicleID !== targetQuad)
-     msg = "NEWMSG,POI,Q" + msg_container.targetQuad + ",P" + msg_container.targetLocation[0] + " " + msg_container.targetLocation[1]
+     msg = "NEWMSG,POI,Q" + targetQuad + ",P" + msg_container.targetLocation[0] + " " + msg_container.targetLocation[1]
 
     return msg;
 }

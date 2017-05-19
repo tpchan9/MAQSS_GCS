@@ -42,6 +42,7 @@ Item {
 
     property var quadcopters: [] // array which stores Quadcopter.qml components
     property var targets: [] // array which stores TargetIcon.qml components
+    property var valid: [] //array which stores ValidIcon.qml components
 
     signal startSignal(var object) // signal to indicate the start button has been toggled
 
@@ -193,7 +194,7 @@ Item {
             messageBox.write(currentMsg)
 
             // increment counter for number of Quick Search/Detailed Search Vehicles
-            if (!quadcopters[nextNdx].role) nQuickSearch++ // increment
+            if (quadcopters[nextNdx].role === 0) nQuickSearch++ // increment
             else nDetailedSearch++
         }
 
@@ -218,14 +219,30 @@ Item {
             for (i1 = 0; i1 < quadcopters.length; i1++) {
 
                 // if detailed search vehicle available, send POI msg
-                if (quadcopters[i1].role) {
-                    XbeeInterface.writeMsg(generatePOIMsg(msg_container, i1));
-                    currentMsg = "Writing POI Msg to Vehicle" + i1;
+                if (quadcopters[i1].role === 1) {
+                    console.log(i1)
+                    console.log("ID NUMBER")
+                    console.log(quadcopters[i1].idNumber)
+                    XbeeInterface.writeMsg(Messaging.generatePOIMsg(msg_container, quadcopters[i1].idNumber));
+                    currentMsg = "Writing POI Msg to Vehicle" + quadcopters[i1].idNumber;
                     messageBox.write(currentMsg);
                     console.log(currentMsg)
                     break;
                 }
             }
+        }
+        if (msg_container.msgType === "VLD") {
+            var valid_component;
+            var next_valid_ndx = valid.length;
+            valid_component = Qt.createComponent("ValidIcon.qml")
+            console.log(valid_component.errorString())
+            while (valid_component.status !== Component.Ready) {}
+            valid[next_valid_ndx] = valid_component.createObject(mapContainer, {"coordLLA": msg_container.validLocation});
+
+            if (valid[next_valid_ndx] === null) console.log("Error Creating ValidIcon Object")
+            currentMsg = "Valid Point of Interest Found at: " + valid[next_valid_ndx].coordLLA;
+            messageBox.write(currentMsg);
+            console.log(currentMsg);
         }
 
         // TODO: Add handle TGT msg which marks the POI as verified

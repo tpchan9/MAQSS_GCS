@@ -197,6 +197,7 @@ Rectangle {
         // Evaluate state when clicked
         onClicked: {
             var ndx;
+            var count;
 
             // Start state, allocate search Chunks and send msg off to vehicles
             if (startSwitch.state === "Started") {
@@ -210,15 +211,16 @@ Rectangle {
 
                 // run function to allocate quadcopters to closest point
                 var msg = Coordinates.allocateSearchChunks(mainPage.searchChunkCoords, mainPage.vehicleCoords, mainPage.field_angle)
-
+                ndx = 0;
                 // Write msg to Quads here
-                for (ndx = 0; ndx < msg.length; ndx++) {
+                for (count = 0; count < quadcopters.length; count++) {
 
-                    if (!quadcopters[ndx].role) { // if role = 0 ("Quick")
-                        console.log("Role: ", quadcopters[ndx].role, "at ndx: ", ndx);
+                    if (quadcopters[count].role === 0) { // if role = 0 ("Quick")
+                        console.log("Role: ", quadcopters[count].role, "at ndx: ", count);
                         XbeeInterface.writeMsg(msg[ndx]);
-                        XbeeInterface.writeMsg("NEWMSG,START,Q" + quadcopters[ndx].idNumber);
                     }
+                    console.log("Writing start message to ", quadcopters[count].idNumber);
+                    XbeeInterface.writeMsg("NEWMSG,START,Q" + quadcopters[count].idNumber);
                 }
             }
 

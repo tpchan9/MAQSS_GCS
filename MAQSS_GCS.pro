@@ -13,7 +13,8 @@ SOURCES += main.cpp \
 RESOURCES += qml.qrc \
     images/marker.png \
     images/quadcopter.png \
-    images/target.png
+    images/target.png \
+    images/valid.png
 
 LIBS += \
     -lboost_system\
