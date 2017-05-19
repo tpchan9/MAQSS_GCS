@@ -189,7 +189,7 @@ Item {
 
             // update quadcopter
             quadcopters[nextNdx].status = msg_container.vehicleStatus
-            quadcopters[nextNdx].role = msg_container.vehicleRole
+            quadcopters[nextNdx].role = 0;//msg_container.vehicleRole
             currentMsg = "Vehicle: " + quadcopters[nextNdx].name + " connected with status: " + quadcopters[nextNdx].status
             messageBox.write(currentMsg)
 

@@ -9,7 +9,7 @@ var CostFunctions = {
     MIN_MEAN_DIST : "MIN_MEAN_DIST",
 };
 
-function findBestCombo(midPointDistances, combos, costFun) {
+function findBestCombo(midPointDistances, combos, costFun, numQS) {
     /* Function to return the best vehicle -> searchChunk allocation given a specified cost function
         Input:
             midPointDistances - array of distances from each quadcopter to each searchChunk midPoint
@@ -28,10 +28,9 @@ function findBestCombo(midPointDistances, combos, costFun) {
     var travelDistances = new Array;
     for (i1 = 0; i1 < combos.length; i1++ ) {
         travelDistances[i1] = new Array;
-        for (j1 = 0; j1 < midPointDistances[0].length; j1++ ) {
-            console.log("Setting combos: ", i1, "quad: ", j1, "quadrant");
-            console.log("travel distance [i][j]", travelDistances[i1][j1]);
-            console.log("combo select quad: ", combos[i1][j1]);
+        for (j1 = 0; j1 < numQS/*midPointDistances[0].length*/; j1++ ) {
+            console.log("Setting chunk: ", i1, "quad: ", j1, "/", numQS);
+            console.log("combo select quad #: ", combos[i1][j1]);
             console.log("midpoint distance for combo quad", midPointDistances[j1][combos[i1][j1]]);
             travelDistances[i1][j1] = midPointDistances[j1][combos[i1][j1]];
         }
@@ -91,14 +90,8 @@ function allocateSearchChunks(searchChunks, vehicleCoords, fieldHeading) {
 
         var maxDist = Utils.max(midPointDistances[i1])[0];
 
-        //for (j1 = 0; j1 < quadcopters.length; j1++) {
-            //if (quadcopters[j1].role === 1) {
-                //midPointDistances[i1][j1] += maxDist;
-            //}
-        //}
-
         while (quadcopters[Utils.min(midPointDistances[i1])[1]].role === 1)
-            midPointDistances[i1][Utils.min(midPointDistances[i1])[1]] = Utils.max(midPointDistances[i1])[0] + 1;
+            midPointDistances[i1][Utils.min(midPointDistances[i1])[1]] += Utils.max(midPointDistances[i1])[0];
 
         choice[i1] = Utils.min(midPointDistances[i1])[1];
     }
@@ -113,10 +106,33 @@ function allocateSearchChunks(searchChunks, vehicleCoords, fieldHeading) {
         // TODO: Implement better algorithm that isnt O(n!)
         var combos = new Array;
         var maxD = new Array;
-        var arr = Utils.range(quadcopters.length)
+        var arr = Utils.range(n);
+
+        // New shit
+        var qsDistances = new Array;
+        var qsIds = new Array;
+        var qsChoice = new Array;
+        var chunkNdx, quadNdx, qsNdx;
+
+        for (chunkNdx = 0; chunkNdx < n; ++chunkNdx) {
+            qsDistances[chunkNdx] = new Array;
+            qsNdx = 0;
+            for (quadNdx = 0; quadNdx < quadcopters.length; ++quadNdx) {
+                if (!quadcopters[quadNdx].role) {
+                    qsDistances[chunkNdx][qsNdx] = midPointDistances[chunkNdx][quadNdx];
+                    qsIds[qsNdx] = quadNdx;
+                    qsNdx++;
+                }
+            }
+        }
+
         Utils.heapsPermute(arr , combos);
         console.log(combos);
-        choice = findBestCombo(midPointDistances, combos, CostFunctions.MIN_MAX_DIST);
+        //choice = findBestCombo(midPointDistances, combos, CostFunctions.MIN_MAX_DIST);
+        qsChoice = findBestCombo(qsDistances, combos, CostFunctions.MIN_MAX_DIST, qsNdx);
+        for (qsNdx = 0; qsNdx < qsChoice.length; ++qsNdx) {
+            choice[qsNdx] = qsIds[qsChoice[qsNdx]];
+        }
     }
 
     // proceed to finding closest corner

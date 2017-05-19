@@ -59,7 +59,7 @@ Rectangle {
             }
             anchorPoint.x: image1.width/2
             anchorPoint.y: image1.height
-            coordinate: QtPositioning.coordinate(35.32814040870949, -120.7519096842783, 0)
+            coordinate: QtPositioning.coordinate(35.328125105558186, -120.7520177295319, 0)
         }
 
         MapQuickItem {
@@ -75,7 +75,7 @@ Rectangle {
             }
             anchorPoint.x: image2.width/2
             anchorPoint.y: image2.height
-            coordinate: QtPositioning.coordinate(35.32781726153697, -120.75204994659205, 0)
+            coordinate: QtPositioning.coordinate(35.32776504708293, -120.75202123212078, 0)
         }
 
         // Rectangle between marker icons
